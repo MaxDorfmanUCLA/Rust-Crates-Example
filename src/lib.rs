@@ -1,49 +1,35 @@
-mod front_of_house {
-  pub mod hosting {
-      pub fn add_to_waitlist() {}
+mod front_of_house;
 
-      fn seat_at_table() {}
-  }
+pub use crate::front_of_house::hosting;
+pub use crate::front_of_house::serving;
 
-  mod serving {
-      fn take_order() {}
+mod back_of_house;
 
-      fn serve_order() {}
+// Using `use` keyword with absolute path to bring struct Breakfast into scope
+pub use back_of_house::Breakfast;
 
-      fn take_payment() {}
-  }
-}
-
-
-mod back_of_house {
-  #[derive(Debug)]
-  pub struct Breakfast {
-      pub toast: String,
-      seasonal_fruit: String,
-  }
-
-  
-  impl Breakfast {
-      pub fn summer(toast: &str) -> Breakfast {
-          Breakfast {
-              toast: String::from(toast),
-              seasonal_fruit: String::from("peaches"),
-          }
-      }
-  }
-}
 
 pub fn eat_at_restaurant() {
+  front_of_house::hosting::add_to_waitlist();
+  front_of_house::hosting::seat_at_table();
+  front_of_house::serving::take_order();
 
-  // Order a breakfast in the summer with Rye toast
-  let mut meal = back_of_house::Breakfast::summer("Rye");
+  impl Breakfast {
+    pub fn summer(toast: &str) -> Breakfast {
+        Breakfast {
+            toast: String::from(toast),
+            seasonal_fruit: String::from("peaches"),
+        }
+    }
+  }
 
-  // Using `use` keyword with absolute path to bring struct Breakfast into scope 
-  use crate::back_of_house::Breakfast;
+  front_of_house::serving::serve_order();
+  front_of_house::serving::take_payment();
 
   // Using struct Breakfast and its method summer() without needing to use path because we brought it into scope earlier^
+  let mut meal = Breakfast::summer("Rye");
+  
   let mut meal2 = Breakfast::summer("Rye");
-
   // Change our mind about what bread we'd like
   println!("Breakfast: {:?}", meal);
   meal.toast = String::from("Wheat");
@@ -52,7 +38,16 @@ pub fn eat_at_restaurant() {
   meal2.toast = String::from("White Bread");
   println!("For meal 2 I'd like {} toast please", meal2.toast);
 
-  // The next line won't compile if we uncomment it; we're not allowed
-  // to see or modify the seasonal fruit that comes with the meal
-  // meal.seasonal_fruit = String::from("blueberries");
 }
+
+
+// mod front_of_house;
+
+// pub use crate::front_of_house::hosting;
+
+// pub fn eat_at_restaurant() {
+//     hosting::add_to_waitlist();
+//     hosting::add_to_waitlist();
+//     hosting::add_to_waitlist();
+// }
+

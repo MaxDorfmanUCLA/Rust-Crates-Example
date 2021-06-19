@@ -4,7 +4,7 @@ extern crate restaurant;
 use restaurant::eat_at_restaurant;
 
 fn main() {
-  restaurant::eat_at_restaurant();
+  //restaurant::eat_at_restaurant();
   eat_at_restaurant();
 }
 
